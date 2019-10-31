@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+
+{% load staticfiles %}
+
+{% load i18n %}
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-COMPATIBLE" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="Vladimir Gratinskiy">
+        <link rel="icon" href="{% static 'Dashboard/images/favicon.ico' %}">
+        <title>Dashboard</title>
+        <script type="text/javascript" src="{% static "Dashboard/js/jquery-3.4.1.min.js" %}"></script>
+        <script type="text/javascript" src="{% static 'Dashboard/js/notify.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'Dashboard/semantic/semantic.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'Dashboard/js/base.js' %}"></script>
+
+        <link href="{% static 'Dashboard/semantic/semantic.min.css' %}" rel="stylesheet">
+        <link href="{% static 'Dashboard/css/base.css' %}" rel="stylesheet">
+
+        {% block head_block %}{% endblock %}
+    </head>
+    <body>
+        <div id="dimmer_of_page" class="ui dimmer">
+            <div class="ui text loader">{% trans 'Please wait' %}</div>
+        </div>
+
+        <div id="page_header" class="ui fixed inverted teal menu">
+            <a class="item" href="{% url 'index' %}">{% trans 'Dashboard' %}</a>
+            <a class="item" href="{% url 'core:action-tree' %}">{% trans 'Actions' %}</a>
+            <a class="item" href="{% url 'core:unit-tree' %}">{% trans 'Units' %}</a>
+            <a class="item" href="{% url 'core:category-tree' %}">{% trans 'Categories' %}</a>
+            <a class="item" href="{% url 'core:links' %}">{% trans 'Links' %}</a>
+        </div>
+
+        <div class="body-block">
+            {% block body_block %}{% endblock %}
+        </div>
+
+        <div id="file_content_modal" class="ui dinamic large modal">
+            <div class="content">
+                <div class="ui grid">
+                    <div class="eight wide column">
+                        <a class="ui icon olive button download-url" href=""><i class="download icon"></i></a>
+                    </div>
+                    <div class="eight wide column right aligned">
+                        <button class="ui icon red button modal-cancel"><i class="remove icon"></i></button>
+                    </div>
+                </div>
+                <div class="filecontent ui olive segment" style="height:75vh;"></div>
+            </div>
+        </div>
+
+        <span id="error__no_file_chosen" hidden>{% trans 'No file is chosen' %}</span>
+        <span id="error__ajax_error" hidden>{% trans 'Unknown error' %}</span>
+    </body>
+</html>

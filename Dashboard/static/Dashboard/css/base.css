@@ -1,0 +1,38 @@
+.body-block {
+    margin: 20px;
+}
+
+body {
+    padding-top: 30px;
+    padding-bottom: 20px;
+}
+
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 50px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+.error-text {
+    color: #d22636;
+}
+
+.filecontent {
+    white-space: pre;
+    font-family: monospace;
+    overflow: auto;
+}

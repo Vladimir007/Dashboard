@@ -1,0 +1,90 @@
+{% extends 'Dashboard/base.html' %}
+
+{% load i18n %}
+{% load staticfiles %}
+
+{% block head_block %}
+    <script type="text/javascript" src="{% static 'core/js/MpttTree.js' %}"></script>
+
+    <script type="application/javascript">
+        const PAGE_ERRORS = {
+            phrases: "{% trans 'Please add at least one phrase' %}",
+            no_file: "{% trans 'Please select the file' %}"
+        };
+    </script>
+    <script type="text/javascript" src="{% static 'core/js/action_tree.js' %}"></script>
+{% endblock %}
+
+{% block body_block %}
+    <div class="ui grid">
+        <div class="ten wide column">
+            <div id="tree_container">
+                <button class="ui green mini button add-item" data-parent="null">{% trans 'Add root' %}</button>
+
+                {# Tree of objects #}
+                <div class="ui list">
+                    {% include 'core/tree_children.html' with object_list=object_list %}
+                </div>
+            </div>
+        </div>
+        <div class="six wide column">
+            <div class="ui mini buttons" style="float: right;">
+                <a href="{% url 'core:download-actions' %}" class="ui mini teal button">{% trans 'Download' %}</a>
+                <button id="upload_modal_show" class="ui mini violet button">{% trans 'Upload file' %}</button>
+            </div>
+            <h3>{% trans 'Found anomalies' %}</h3>
+            <div style="max-height: 80vh;overflow: auto">
+                {% for anomaly in anomalies %}
+                    {% include 'core/action_anomaly.html' with anomaly=anomaly %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    {# Create or edit action #}
+    <div id="action_form_modal" class="ui modal">
+        <div class="ui content form">
+            <div class="field">
+                <label for="phrases_list">{% trans 'Phrases (enter each phrase on a row)' %}</label>
+                <textarea id="phrases_list" rows="5" style="resize:none"></textarea>
+            </div>
+        </div>
+        <div class="actions">
+            <button class="ui green button modal-confirm">{% trans 'Confirm' %}</button>
+            <button class="ui blue button modal-cancel">{% trans 'Cancel' %}</button>
+        </div>
+    </div>
+
+    {# Remove action modal #}
+    <div id="remove_action_modal" class="ui basic modal">
+        <div class="ui icon header">
+            <i class="warning sign icon"></i>{% trans 'Are you sure' %}?
+        </div>
+        <div class="content">
+            <div class="ui center aligned grid">
+                <p>{% trans 'All children will be deleted. This action is irreversible.' %}</p>
+            </div>
+        </div>
+        <div class="actions">
+            <div class="ui center aligned grid">
+                <button class="ui orange basic inverted button modal-confirm">{% trans 'Confirm' %}</button>
+                <button class="ui blue basic inverted button modal-cancel">{% trans 'Cancel' %}</button>
+            </div>
+        </div>
+    </div>
+
+    {# Upload acations modal #}
+    <div id="upload_actions_modal" class="ui modal">
+        <div class="header">{% trans 'Select yaml file' %}</div>
+        <div class="content">
+            <h5 class="ui red header">{% trans 'Warning! Existing actions will be deleted!' %}</h5>
+            <span class="ui violet button btn-file"><span class="btn-file-name">{% trans 'Browse' %}</span><input id="actions_file_input" type="file" accept="yaml"></span>
+        </div>
+        <div class="actions">
+            <div class="ui green button modal-confirm" data-url="{% url 'core:upload-actions' %}">{% trans 'Upload' %}</div>
+            <div class="ui blue button modal-cancel">{% trans 'Cancel' %}</div>
+        </div>
+    </div>
+
+    <span id="api_list_url" hidden>{% url 'core:api-action-list' %}</span>
+{% endblock %}

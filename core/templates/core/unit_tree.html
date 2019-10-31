@@ -1,0 +1,79 @@
+{% extends 'Dashboard/base.html' %}
+
+{% load i18n %}
+{% load staticfiles %}
+
+{% block head_block %}
+    <script type="text/javascript" src="{% static 'core/js/MpttTree.js' %}"></script>
+
+    <script type="application/javascript">
+        const PAGE_ERRORS = {
+            names: "{% trans 'Please add at least one name' %}",
+            no_file: "{% trans 'Please select the file' %}"
+        };
+    </script>
+    <script type="text/javascript" src="{% static 'core/js/unit_tree.js' %}"></script>
+{% endblock %}
+
+{% block body_block %}
+    <div class="ui mini buttons" style="float: right;">
+        <a href="{% url 'core:download-units' %}" class="ui mini teal button">{% trans 'Download' %}</a>
+        <button id="upload_modal_show" class="ui mini violet button">{% trans 'Upload file' %}</button>
+    </div>
+
+    <div id="tree_container">
+        <button class="ui green mini button add-item" data-parent="null">{% trans 'Add root' %}</button>
+
+        {# Tree of objects #}
+        <div class="ui list">
+            {% include 'core/tree_children.html' with object_list=object_list %}
+        </div>
+    </div>
+
+    {# Create or edit unit #}
+    <div id="unit_form_modal" class="ui modal">
+        <div class="ui content form">
+            <div class="field">
+                <label for="names_list">{% trans 'Names (enter each name on a row)' %}</label>
+                <textarea id="names_list" rows="5" style="resize:none"></textarea>
+            </div>
+        </div>
+        <div class="actions">
+            <button class="ui green button modal-confirm">{% trans 'Confirm' %}</button>
+            <button class="ui blue button modal-cancel">{% trans 'Cancel' %}</button>
+        </div>
+    </div>
+
+    {# Remove unit modal #}
+    <div id="remove_unit_modal" class="ui basic modal">
+        <div class="ui icon header">
+            <i class="warning sign icon"></i>{% trans 'Are you sure' %}?
+        </div>
+        <div class="content">
+            <div class="ui center aligned grid">
+                <p>{% trans 'All children will be deleted. This action is irreversible.' %}</p>
+            </div>
+        </div>
+        <div class="actions">
+            <div class="ui center aligned grid">
+                <button class="ui orange basic inverted button modal-confirm">{% trans 'Confirm' %}</button>
+                <button class="ui blue basic inverted button modal-cancel">{% trans 'Cancel' %}</button>
+            </div>
+        </div>
+    </div>
+
+    {# Upload units modal #}
+    <div id="upload_units_modal" class="ui modal">
+        <div class="header">{% trans 'Select yaml file' %}</div>
+        <div class="content">
+            <h5 class="ui red header">{% trans 'Warning! Existing units will be deleted!' %}</h5>
+            <span class="ui violet button btn-file"><span class="btn-file-name">{% trans 'Browse' %}</span><input id="units_file_input" type="file" accept="yaml"></span>
+        </div>
+        <div class="actions">
+            <div class="ui green button modal-confirm" data-url="{% url 'core:upload-units' %}">{% trans 'Upload' %}</div>
+            <div class="ui blue button modal-cancel">{% trans 'Cancel' %}</div>
+        </div>
+    </div>
+
+    <span id="api_list_url" hidden>{% url 'core:api-unit-list' %}</span>
+{% endblock %}

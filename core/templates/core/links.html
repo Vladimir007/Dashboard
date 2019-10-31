@@ -1,0 +1,57 @@
+{% extends 'Dashboard/base.html' %}
+
+{% load i18n %}
+{% load staticfiles %}
+
+{% block head_block %}
+    <script type="application/javascript">
+        const PAGE_ERRORS = {
+            action_not_selected: "{% trans 'Please select at least one action' %}",
+            unit_not_selected: "{% trans 'Please select at least one unit' %}",
+            category_not_selected: "{% trans 'Please select at least one category' %}",
+            action_too_many: "{% trans 'Please select just one action' %}",
+            unit_too_many: "{% trans 'Please select just one unit' %}",
+            category_too_many: "{% trans 'Please select just one category' %}"
+        };
+    </script>
+    <script type="text/javascript" src="{% static 'core/js/links.js' %}"></script>
+{% endblock %}
+
+{% block body_block %}
+    <div class="ui three columns grid">
+        <div class="column">
+            <div class="ui teal segment">
+                <h2>{% trans 'Actions' %}</h2>
+                <div id="actions_tree" style="max-height: 50vh;overflow: auto;">
+                    <div class="ui list">
+                        {% include 'core/links_tree.html' with object_list=actions %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="ui teal segment">
+                <h2>{% trans 'Units' %}</h2>
+                <div id="units_tree" style="max-height: 50vh;overflow: auto;">
+                    <div class="ui list">
+                        {% include 'core/links_tree.html' with object_list=units %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="ui teal segment">
+                <h2>{% trans 'Categories' %}</h2>
+                <div id="categories_tree" style="max-height: 50vh;overflow: auto;">
+                    <div class="ui list">
+                        {% include 'core/links_tree.html' with object_list=categories %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="ui divider"></div>
+    <button id="create_link_button" class="ui green button" data-url="{% url 'core:api-links-list' %}">{% trans 'Create link' %}</button>
+    <button id="remove_link_button" class="ui red button" data-url="{% url 'core:api-destroy-link' %}">{% trans 'Remove link' %}</button>
+    <button id="check_link_button" class="ui blue button" data-url="{% url 'core:api-check-link' %}">{% trans 'Check link' %}</button>
+{% endblock %}

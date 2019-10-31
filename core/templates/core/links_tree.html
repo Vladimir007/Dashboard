@@ -1,0 +1,16 @@
+{% load i18n %}
+
+{% for obj in object_list %}
+    <div class="item">
+        <i class="caret square right link black icon show-children" data-url="{{ obj.children_url }}?form=false"></i>
+        <div class="content">
+            <div class="description">
+                <div class="ui checkbox">
+                    <input type="checkbox" name="tree" value="{{ obj.pk }}">
+                    <label>{{ obj.description_html|safe }}</label>
+                </div>
+            </div>
+            <div class="list" style="display: none;"></div>
+        </div>
+    </div>
+{% endfor %}

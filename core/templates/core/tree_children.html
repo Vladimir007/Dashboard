@@ -1,0 +1,16 @@
+{% load i18n %}
+
+{% for obj in object_list %}
+    <div class="item">
+        <i class="caret square right link black icon show-children" data-url="{{ obj.children_url }}?form=true"></i>
+        <div class="content">
+            <div class="header">
+                <i class="add green link icon note-popup add-item" data-content="{% trans 'Add child' %}" data-parent="{{ obj.pk }}"></i>
+                <i class="edit blue link icon note-popup edit-item" data-content="{% trans 'Edit' %}" data-url="{{ obj.detail_url }}"></i>
+                <i class="remove red link icon note-popup remove-item" data-content="{% trans 'Remove' %}" data-url="{{ obj.detail_url }}"></i>
+            </div>
+            <div class="description">{{ obj.description_html|safe }}</div>
+            <div class="list" style="display: none;"></div>
+        </div>
+    </div>
+{% endfor %}

@@ -1,0 +1,15 @@
+<div class="ui segment">
+    <div class="ui bulleted list">
+        {% for parent in anomaly.action1.get_ancestors %}
+            <div class="item">{{ parent.description_html }}</div>
+        {% endfor %}
+        <div class="red item">{{ anomaly.action1.phrases|index:anomaly.phrase1 }}</div>
+    </div>
+    <div class="ui divider"></div>
+    <div class="ui bulleted list">
+        {% for parent in anomaly.action2.get_ancestors %}
+            <div class="item">{{ parent.description_html }}</div>
+        {% endfor %}
+        <div class="red item">{{ anomaly.action2.phrases|index:anomaly.phrase2 }}</div>
+    </div>
+</div>

@@ -1,0 +1,85 @@
+{% extends 'Dashboard/base.html' %}
+
+{% load i18n %}
+{% load staticfiles %}
+
+{% block head_block %}
+    <script type="text/javascript" src="{% static 'core/js/MpttTree.js' %}"></script>
+
+    <script type="application/javascript">
+        const PAGE_ERRORS = {
+            name: "{% trans 'Please fill the name' %}",
+            no_file: "{% trans 'Please select the file' %}",
+            columns: "{% trans 'Please set the columns value' %}"
+        };
+    </script>
+    <script type="text/javascript" src="{% static 'core/js/category_tree.js' %}"></script>
+{% endblock %}
+
+{% block body_block %}
+    <div class="ui mini buttons" style="float: right;">
+        <a href="{% url 'core:download-categories' %}" class="ui mini teal button">{% trans 'Download' %}</a>
+        <button id="upload_modal_show" class="ui mini violet button">{% trans 'Upload file' %}</button>
+    </div>
+
+    <div id="tree_container">
+        <button class="ui green mini button add-item" data-parent="null">{% trans 'Add root' %}</button>
+
+        {# Tree of objects #}
+        <div class="ui list">
+            {% include 'core/tree_children.html' with object_list=object_list %}
+        </div>
+    </div>
+
+    {# Create or edit category #}
+    <div id="category_form_modal" class="ui modal">
+        <div class="ui content form">
+            <div class="field">
+                <label for="name_input">{% trans 'Category name' %}</label>
+                <input id="name_input" type="text">
+            </div>
+        </div>
+        <div class="actions">
+            <button class="ui green button modal-confirm">{% trans 'Confirm' %}</button>
+            <button class="ui blue button modal-cancel">{% trans 'Cancel' %}</button>
+        </div>
+    </div>
+
+    {# Remove category modal #}
+    <div id="remove_category_modal" class="ui basic modal">
+        <div class="ui icon header">
+            <i class="warning sign icon"></i>{% trans 'Are you sure' %}?
+        </div>
+        <div class="content">
+            <div class="ui center aligned grid">
+                <p>{% trans 'All children will be deleted. This action is irreversible.' %}</p>
+            </div>
+        </div>
+        <div class="actions">
+            <div class="ui center aligned grid">
+                <button class="ui orange basic inverted button modal-confirm">{% trans 'Confirm' %}</button>
+                <button class="ui blue basic inverted button modal-cancel">{% trans 'Cancel' %}</button>
+            </div>
+        </div>
+    </div>
+
+    {# Upload categories modal #}
+    <div id="upload_categories_modal" class="ui modal">
+        <div class="header">{% trans 'Select csv file' %}</div>
+        <div class="content">
+            <h5 class="ui red header">{% trans 'Warning! Existing categories will be deleted (even in failure case)!' %}</h5>
+            <label for="columns_value">{% trans 'Category columns, separated by comma' %}</label>
+            <div class="ui fluid input">
+                <input id="columns_value" type="text">
+            </div>
+            <div class="ui divider"></div>
+            <span class="ui violet button btn-file"><span class="btn-file-name">{% trans 'Browse' %}</span><input id="categories_file_input" type="file" accept="csv"></span>
+        </div>
+        <div class="actions">
+            <div class="ui green button modal-confirm" data-url="{% url 'core:upload-categories' %}">{% trans 'Upload' %}</div>
+            <div class="ui blue button modal-cancel">{% trans 'Cancel' %}</div>
+        </div>
+    </div>
+
+    <span id="api_list_url" hidden>{% url 'core:api-category-list' %}</span>
+{% endblock %}
